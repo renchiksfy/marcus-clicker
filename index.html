@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Marcus Clicker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0a url('backround.jpg.jpg') center center / cover no-repeat fixed;
+      color: white;
+      font-family: 'Rajdhani', Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* LEFT PANEL */
+    #left {
+      width: 420px;
+      background: rgba(10,10,10,0.88);
+      border-right: 1px solid #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 24px;
+      gap: 18px;
+      overflow-y: auto;
+    }
+
+    #left h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      color: #ff6a00;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .upgrade-btn {
+      width: 100%;
+      background: rgba(20,20,20,0.9);
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 28px 24px;
+      cursor: pointer;
+      text-align: left;
+      color: white;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .upgrade-btn:hover { border-color: #ff6a00; background: rgba(30,30,30,0.95); }
+    .upgrade-btn.cant-afford { opacity: 0.35; cursor: not-allowed; }
+
+    .upgrade-btn .uname {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ff6a00;
+    }
+
+    .upgrade-btn .udesc {
+      font-size: 1.2rem;
+      color: #999;
+      margin-top: 8px;
+    }
+
+    .upgrade-btn .ucost {
+      font-size: 1.05rem;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    .upgrade-btn .uowned {
+      float: right;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      color: #ff6a00;
+    }
+
+    /* CENTER */
+    #center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      position: relative;
+    }
+
+    #game-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.6rem;
+      font-weight: 900;
+      color: #ff6a00;
+      letter-spacing: 6px;
+      text-shadow: 0 0 40px rgba(255,106,0,0.6);
+    }
+
+    #score {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      color: #ff6a00;
+      letter-spacing: 2px;
+      font-weight: 400;
+    }
+
+    #score span {
+      font-family: 'Orbitron', sans-serif;
+      color: white;
+      font-size: 2.8rem;
+      font-weight: 400;
+    }
+
+    #cps {
+      font-size: 1.2rem;
+      color: #ff6a00;
+      margin-top: -8px;
+      letter-spacing: 1px;
+    }
+
+    #marcus-btn {
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      border: 6px solid #ff6a00;
+      overflow: hidden;
+      cursor: pointer;
+      background: none;
+      padding: 0;
+      transition: transform 0.07s, box-shadow 0.07s;
+      box-shadow: 0 0 60px rgba(255,106,0,0.35);
+    }
+
+    #marcus-btn:active {
+      transform: scale(0.93);
+      box-shadow: 0 0 100px rgba(255,106,0,0.7);
+    }
+
+    #marcus-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .float-text {
+      position: fixed;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ff6a00;
+      pointer-events: none;
+      animation: floatup 0.9s ease forwards;
+    }
+
+    @keyframes floatup {
+      0%   { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-80px); }
+    }
+
+    /* RIGHT PANEL */
+    #right {
+      width: 300px;
+      background: rgba(10,10,10,0.88);
+      border-left: 1px solid #2a2a2a;
+      padding: 36px 22px;
+      overflow-y: auto;
+    }
+
+    #right h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      color: #ff6a00;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.05rem;
+      color: #555;
+      padding: 10px 0;
+      border-bottom: 1px solid #161616;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-row span {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    #milestone {
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    #milestone b { color: #ff6a00; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; }
+
+    #open-gamble-btn {
+      margin-top: 24px;
+      width: 100%;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      padding: 12px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 2px;
+      box-shadow: 0 0 20px rgba(255,106,0,0.3);
+      transition: box-shadow 0.2s;
+    }
+
+    #open-gamble-btn:hover { box-shadow: 0 0 30px rgba(255,106,0,0.6); }
+
+    /* GAMBLE OVERLAY */
+    #gamble-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+      z-index: 100;
+    }
+
+    #gamble-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #gamble-modal {
+      background: #0f0f0f;
+      border: 1px solid #2a2a2a;
+      border-radius: 16px;
+      padding: 44px 52px;
+      width: 500px;
+      text-align: center;
+      transform: scale(0.88);
+      transition: transform 0.35s ease;
+      box-shadow: 0 0 60px rgba(255,106,0,0.15);
+    }
+
+    #gamble-overlay.open #gamble-modal {
+      transform: scale(1);
+    }
+
+    #gamble-modal h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #ff6a00;
+      letter-spacing: 5px;
+      margin-bottom: 6px;
+      text-shadow: 0 0 20px rgba(255,106,0,0.4);
+    }
+
+    #gamble-modal .sub {
+      color: #444;
+      font-size: 0.88rem;
+      margin-bottom: 32px;
+      letter-spacing: 1px;
+    }
+
+    .big-slots {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .big-slot {
+      width: 90px;
+      height: 90px;
+      background: #141414;
+      border: 2px solid #2a2a2a;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      transition: border-color 0.2s;
+    }
+
+    .big-slot.spinning {
+      animation: spin 0.1s infinite;
+      border-color: #ff6a00;
+    }
+
+    @keyframes spin {
+      0%   { transform: scaleY(1); }
+      50%  { transform: scaleY(0.1); }
+      100% { transform: scaleY(1); }
+    }
+
+    #big-bet-input {
+      width: 100%;
+      background: #141414;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      color: white;
+      padding: 12px 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      text-align: center;
+      outline: none;
+    }
+
+    #big-bet-input:focus { border-color: #ff6a00; }
+
+    .bet-quick {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .bet-quick button {
+      background: #141414;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      color: #666;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.85rem;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .bet-quick button:hover { border-color: #ff6a00; color: #ff6a00; }
+
+    #big-spin-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+      box-shadow: 0 0 20px rgba(255,106,0,0.3);
+      transition: box-shadow 0.2s;
+    }
+
+    #big-spin-btn:hover { box-shadow: 0 0 40px rgba(255,106,0,0.6); }
+    #big-spin-btn:disabled { background: #1a1a1a; color: #333; cursor: not-allowed; box-shadow: none; }
+
+    #big-gamble-result {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      min-height: 28px;
+      color: #ff6a00;
+      letter-spacing: 2px;
+    }
+
+    #close-gamble-btn {
+      margin-top: 18px;
+      background: none;
+      border: 1px solid #222;
+      border-radius: 6px;
+      color: #333;
+      padding: 8px 28px;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    #close-gamble-btn:hover { color: #888; border-color: #444; }
+
+    /* XP BAR */
+    #xp-bar-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      background: rgba(0,0,0,0.9);
+      border-bottom: 1px solid #1e1e1e;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+      z-index: 40;
+    }
+
+    #xp-level {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      color: #ff6a00;
+      white-space: nowrap;
+      min-width: 70px;
+    }
+
+    #xp-bar-bg {
+      flex: 1;
+      height: 10px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    #xp-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      color: #444;
+      white-space: nowrap;
+      min-width: 100px;
+      text-align: right;
+    }
+
+    body { padding-top: 44px; }
+    #prestige-btn {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      background: #000;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #aaa;
+      padding: 10px 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      z-index: 50;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    #prestige-btn:hover { border-color: #ff6a00; color: #ff6a00; }
+
+    #prestige-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+      z-index: 200;
+    }
+    #prestige-overlay.open { opacity: 1; pointer-events: all; }
+
+    #prestige-modal {
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 16px;
+      padding: 48px 52px;
+      width: 480px;
+      text-align: center;
+      transform: scale(0.88);
+      transition: transform 0.35s ease;
+    }
+    #prestige-overlay.open #prestige-modal { transform: scale(1); }
+
+    #prestige-modal h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      color: #fff;
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+    }
+
+    #prestige-modal p {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    #prestige-bonus-preview {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      color: #ff6a00;
+      margin: 20px 0 28px;
+    }
+
+    #prestige-confirm-btn {
+      background: #000;
+      border: 2px solid #ff6a00;
+      border-radius: 8px;
+      color: #ff6a00;
+      padding: 14px 36px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      margin-right: 12px;
+      transition: background 0.2s;
+    }
+    #prestige-confirm-btn:hover { background: #1a0a00; }
+
+    #prestige-cancel-btn {
+      background: none;
+      border: 1px solid #222;
+      border-radius: 8px;
+      color: #444;
+      padding: 14px 36px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    #prestige-cancel-btn:hover { color: #888; border-color: #555; }
+
+    #prestige-count {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      color: #333;
+      margin-top: 20px;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="left">
+    <h2>Upgrades</h2>
+    <div id="upgrades"></div>
+  </div>
+
+  <div id="center">
+    <div id="game-title">Marcus Clicker</div>
+    <div id="score">marloons: <span id="count">0</span></div>
+    <div id="cps">0 marloons per second</div>
+    <button id="marcus-btn" onclick="doClick(event)">
+      <img src="marcus.jpg.jpeg" alt="Marcus" />
+    </button>
+  </div>
+
+  <div id="right">
+    <h2>Stats</h2>
+    <div class="stat-row">Total marloons <span id="stat-total">0</span></div>
+    <div class="stat-row">Marloon power <span id="stat-power">1</span></div>
+    <div class="stat-row">Auto marloons <span id="stat-auto">0</span></div>
+    <div class="stat-row">Multiplier <span id="stat-multi">x1</span></div>
+    <div id="milestone"></div>
+    <button id="open-gamble-btn" onclick="openGamble()">GAMBLE</button>
+  </div>
+
+  <div id="xp-bar-wrap">
+    <div id="xp-level">LVL 1</div>
+    <div id="xp-bar-bg"><div id="xp-bar-fill"></div></div>
+    <div id="xp-text">0 / 100 XP</div>
+  </div>
+
+  <button id="prestige-btn" onclick="openPrestige()">PRESTIGE</button>
+
+  <div id="prestige-overlay">
+    <div id="prestige-modal">
+      <h2>PRESTIGE</h2>
+      <p>Reset everything and start over.<br>In return, each upgrade gets a permanent bonus to its marloons per second based on how much you had.</p>
+      <div id="prestige-bonus-preview"></div>
+      <button id="prestige-confirm-btn" onclick="doPrestige()">CONFIRM RESET</button>
+      <button id="prestige-cancel-btn" onclick="closePrestige()">cancel</button>
+      <div id="prestige-count"></div>
+    </div>
+  </div>
+
+  <div id="gamble-overlay">
+    <div id="gamble-modal">
+      <h2>GAMBLING</h2>
+      <p class="sub">bet your marloons. win big or lose it all.</p>
+      <div class="big-slots">
+        <div class="big-slot" id="s1">?</div>
+        <div class="big-slot" id="s2">?</div>
+        <div class="big-slot" id="s3">?</div>
+      </div>
+      <input id="big-bet-input" type="number" placeholder="Enter bet" min="1" />
+      <div class="bet-quick">
+        <button onclick="setBet(10)">10</button>
+        <button onclick="setBet(100)">100</button>
+        <button onclick="setBet(1000)">1K</button>
+        <button onclick="setBetHalf()">Half</button>
+        <button onclick="setBetAll()">All in</button>
+      </div>
+      <button id="big-spin-btn" onclick="doSpin()">SPIN</button>
+      <div id="big-gamble-result"></div>
+      <button id="close-gamble-btn" onclick="closeGamble()">close</button>
+    </div>
+  </div>
+
+  <script>
+    var marloons = 0;
+    var totalmarloons = 0;
+    var clickPower = 1;
+    var autoRate = 0;
+    var multiplier = 1;
+
+    var upgrades = [
+      { name: "Better Finger",  desc: "+1 marloon power",        cost: 10,    baseCost: 10,    owned: 0, type: "power", value: 1 },
+      { name: "Auto Clicker",   desc: "+1 marloon per second",   cost: 50,    baseCost: 50,    owned: 0, type: "auto",  value: 1 },
+      { name: "Double Tap",     desc: "+2 marloon power",        cost: 150,   baseCost: 150,   owned: 0, type: "power", value: 2 },
+      { name: "Marcus Fan",     desc: "+5 marloons per second",  cost: 500,   baseCost: 500,   owned: 0, type: "auto",  value: 5 },
+      { name: "Click Gloves",   desc: "+5 marloon power",        cost: 1000,  baseCost: 1000,  owned: 0, type: "power", value: 5 },
+      { name: "Marcus Army",    desc: "+20 marloons per second", cost: 5000,  baseCost: 5000,  owned: 0, type: "auto",  value: 20 },
+      { name: "2x Multiplier",  desc: "doubles all marloons",    cost: 10000, baseCost: 10000, owned: 0, type: "multi", value: 2 },
+      { name: "Robot Hands",    desc: "+50 marloons per second", cost: 50000, baseCost: 50000, owned: 0, type: "auto",  value: 50 },
+    ];
+
+    var milestones = [100, 500, 1000, 5000, 10000, 50000, 100000];
+    var milestoneNames = ["100 marloons!", "500 marloons!", "1K marloons!", "5K marloons!", "10K marloons!", "50K marloons!", "100K marloons!"];
+    var nextMilestone = 0;
+
+    function renderUpgrades() {
+      var html = "";
+      for (var i = 0; i < upgrades.length; i++) {
+        var u = upgrades[i];
+        var cant = marloons < u.cost ? "cant-afford" : "";
+        html += '<button class="upgrade-btn ' + cant + '" onclick="buyUpgrade(' + i + ')">' +
+          '<span class="uowned">' + u.owned + '</span>' +
+          '<div class="uname">' + u.name + '</div>' +
+          '<div class="udesc">' + u.desc + '</div>' +
+          '<div class="ucost">Cost: ' + formatNum(u.cost) + ' marloons</div>' +
+          '</button>';
+      }
+      document.getElementById("upgrades").innerHTML = html;
+    }
+
+    function buyUpgrade(i) {
+      var u = upgrades[i];
+      if (marloons < u.cost) return;
+      marloons -= u.cost;
+      u.owned++;
+      u.cost = Math.floor(u.baseCost * Math.pow(1.5, u.owned));
+      if (u.type === "power") clickPower += u.value;
+      if (u.type === "auto")  autoRate += u.value;
+      if (u.type === "multi") multiplier *= u.value;
+      updateDisplay();
+      renderUpgrades();
+    }
+
+    function doClick(e) {
+      var gained = clickPower * multiplier;
+      marloons += gained;
+      totalmarloons += gained;
+      addXP(gained);
+      updateDisplay();
+      renderUpgrades();
+      spawnFloat(e, "+" + gained);
+      checkMilestone();
+    }
+
+    function spawnFloat(e, text) {
+      var el = document.createElement("div");
+      el.className = "float-text";
+      el.innerText = text;
+      var rect = document.getElementById("marcus-btn").getBoundingClientRect();
+      el.style.left = (rect.left + rect.width/2 - 20 + (Math.random()*40-20)) + "px";
+      el.style.top  = (rect.top - 10) + "px";
+      document.body.appendChild(el);
+      setTimeout(function() { el.remove(); }, 900);
+    }
+
+    function checkMilestone() {
+      if (nextMilestone < milestones.length && totalmarloons >= milestones[nextMilestone]) {
+        var m = document.getElementById("milestone");
+        m.innerHTML = "milestone: <b>" + milestoneNames[nextMilestone] + "</b>";
+        nextMilestone++;
+        setTimeout(function() { document.getElementById("milestone").innerHTML = ""; }, 3000);
+      }
+    }
+
+    function updateDisplay() {
+      document.getElementById("count").innerText = formatNum(Math.floor(marloons));
+      document.getElementById("cps").innerText = formatNum(autoRate * multiplier) + " marloons per second";
+      document.getElementById("stat-total").innerText = formatNum(totalmarloons);
+      document.getElementById("stat-power").innerText = clickPower * multiplier;
+      document.getElementById("stat-auto").innerText = autoRate;
+      document.getElementById("stat-multi").innerText = "x" + multiplier;
+    }
+
+    function formatNum(n) {
+      if (n >= 1000000) return (n/1000000).toFixed(1) + "M";
+      if (n >= 1000) return (n/1000).toFixed(1) + "K";
+      return Math.floor(n);
+    }
+
+    setInterval(function() {
+      if (autoRate > 0) {
+        var gained = autoRate * multiplier;
+        marloons += gained;
+        totalmarloons += gained;
+        addXP(gained);
+        checkMilestone();
+        updateDisplay();
+        renderUpgrades();
+      }
+    }, 1000);
+
+    renderUpgrades();
+    updateDisplay();
+
+    // SAVE & LOAD
+    function saveGame() {
+      var data = {
+        marloons: marloons,
+        totalmarloons: totalmarloons,
+        clickPower: clickPower,
+        autoRate: autoRate,
+        multiplier: multiplier,
+        nextMilestone: nextMilestone,
+        prestigeCount: prestigeCount,
+        prestigeBonus: prestigeBonus,
+        xp: xp,
+        level: level,
+        upgrades: upgrades.map(function(u) { return { owned: u.owned, cost: u.cost }; })
+      };
+      localStorage.setItem("marcusClicker", JSON.stringify(data));
+    }
+
+    function loadGame() {
+      var raw = localStorage.getItem("marcusClicker");
+      if (!raw) return;
+      try {
+        var data = JSON.parse(raw);
+        marloons = data.marloons || 0;
+        totalmarloons = data.totalmarloons || 0;
+        clickPower = data.clickPower || 1;
+        autoRate = data.autoRate || 0;
+        multiplier = data.multiplier || 1;
+        nextMilestone = data.nextMilestone || 0;
+        prestigeCount = data.prestigeCount || 0;
+        prestigeBonus = data.prestigeBonus || 0;
+        xp = data.xp || 0;
+        level = data.level || 1;
+        if (data.upgrades) {
+          data.upgrades.forEach(function(saved, i) {
+            if (upgrades[i]) {
+              upgrades[i].owned = saved.owned;
+              upgrades[i].cost = saved.cost;
+            }
+          });
+        }
+      } catch(e) {}
+    }
+
+    loadGame();
+    updateDisplay();
+    updateXPBar();
+    renderUpgrades();
+    setInterval(saveGame, 5000);
+
+    // XP & LEVELS
+    var xp = 0;
+    var level = 1;
+
+    function xpForLevel(lvl) {
+      return Math.floor(100 * Math.pow(1.4, lvl - 1));
+    }
+
+    function addXP(amount) {
+      xp += amount;
+      while (xp >= xpForLevel(level)) {
+        xp -= xpForLevel(level);
+        level++;
+        var m = document.getElementById("milestone");
+        m.innerHTML = "level up! <b>LVL " + level + "</b>";
+        setTimeout(function() { m.innerHTML = ""; }, 3000);
+      }
+      updateXPBar();
+    }
+
+    function updateXPBar() {
+      var needed = xpForLevel(level);
+      var pct = Math.min(100, (xp / needed) * 100);
+      document.getElementById("xp-bar-fill").style.width = pct + "%";
+      document.getElementById("xp-level").innerText = "LVL " + level;
+      document.getElementById("xp-text").innerText = formatNum(xp) + " / " + formatNum(needed) + " XP";
+    }
+
+    // PRESTIGE
+    var prestigeCount = 0;
+    var prestigeBonus = 0; // flat bonus auto marloons per second carried over
+
+    function calcPrestigeBonus() {
+      // bonus = sqrt(totalMarloons) * 0.1 + autoRate * 0.5, scaled by prestige count
+      return Math.max(1, Math.floor(Math.sqrt(totalmarloons) * 0.1 + autoRate * 0.5));
+    }
+
+    function openPrestige() {
+      if (autoRate * multiplier < 10) {
+        alert("You need at least 10 marloons per second to prestige!");
+        return;
+      }
+      if (marloons < 270) {
+        alert("You need at least 270 marloons to prestige!");
+        return;
+      }
+      var bonus = calcPrestigeBonus();
+      document.getElementById("prestige-bonus-preview").innerText =
+        "+" + formatNum(bonus) + " permanent marloons/sec bonus";
+      document.getElementById("prestige-count").innerText =
+        prestigeCount > 0 ? "prestige #" + prestigeCount : "";
+      document.getElementById("prestige-overlay").classList.add("open");
+    }
+
+    function closePrestige() {
+      document.getElementById("prestige-overlay").classList.remove("open");
+    }
+
+    function doPrestige() {
+      var bonus = calcPrestigeBonus();
+      prestigeBonus += bonus;
+      prestigeCount++;
+
+      // reset everything
+      marloons = 0;
+      totalmarloons = 0;
+      clickPower = 1;
+      autoRate = prestigeBonus; // carry over bonus as base auto rate
+      multiplier = 1;
+      nextMilestone = 0;
+
+      upgrades.forEach(function(u) {
+        u.owned = 0;
+        u.cost = u.baseCost;
+      });
+
+      closePrestige();
+      updateDisplay();
+      renderUpgrades();
+
+      document.getElementById("stat-auto").innerText = autoRate;
+      var m = document.getElementById("milestone");
+      m.innerHTML = "prestige <b>#" + prestigeCount + "</b> — +" + formatNum(bonus) + " marloons/sec bonus!";
+      setTimeout(function() { m.innerHTML = ""; }, 4000);
+    }
+    var symbols = ["😂", "💀", "🔥", "⭐", "💎", "🤡"];
+    var spinning = false;
+
+    function openGamble() { document.getElementById("gamble-overlay").classList.add("open"); }
+    function closeGamble() { document.getElementById("gamble-overlay").classList.remove("open"); }
+
+    function setBet(n) { document.getElementById("big-bet-input").value = n; }
+    function setBetHalf() { document.getElementById("big-bet-input").value = Math.floor(marloons / 2); }
+    function setBetAll() { document.getElementById("big-bet-input").value = Math.floor(marloons); }
+
+    function doSpin() {
+      if (spinning) return;
+      var bet = parseInt(document.getElementById("big-bet-input").value);
+      var result = document.getElementById("big-gamble-result");
+      if (!bet || bet <= 0) { result.style.color = "#ff6a00"; result.innerText = "enter a bet!"; return; }
+      if (bet > marloons) { result.style.color = "red"; result.innerText = "not enough marloons!"; return; }
+
+      spinning = true;
+      marloons -= bet;
+      updateDisplay();
+      document.getElementById("big-spin-btn").disabled = true;
+      result.innerText = "";
+
+      var slots = [document.getElementById("s1"), document.getElementById("s2"), document.getElementById("s3")];
+      slots.forEach(function(s) { s.classList.add("spinning"); });
+
+      var ticks = 0;
+      var interval = setInterval(function() {
+        slots.forEach(function(s) { s.innerText = symbols[Math.floor(Math.random() * symbols.length)]; });
+        ticks++;
+        if (ticks >= 18) {
+          clearInterval(interval);
+          slots.forEach(function(s) { s.classList.remove("spinning"); });
+
+          var r1 = symbols[Math.floor(Math.random() * symbols.length)];
+          var r2 = symbols[Math.floor(Math.random() * symbols.length)];
+          var r3 = symbols[Math.floor(Math.random() * symbols.length)];
+          slots[0].innerText = r1;
+          slots[1].innerText = r2;
+          slots[2].innerText = r3;
+
+          if (r1 === r2 && r2 === r3) {
+            var win = bet * 10;
+            marloons += win;
+            result.style.color = "#ff6a00";
+            result.innerText = "JACKPOT! +" + formatNum(win);
+          } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+            var win = bet * 2;
+            marloons += win;
+            result.style.color = "lime";
+            result.innerText = "2 MATCH! +" + formatNum(win);
+          } else {
+            result.style.color = "red";
+            result.innerText = "LOST " + formatNum(bet);
+          }
+
+          updateDisplay();
+          spinning = false;
+          document.getElementById("big-spin-btn").disabled = false;
+        }
+      }, 80);
+    }
+  </script>
+
+</body>
+</html>
