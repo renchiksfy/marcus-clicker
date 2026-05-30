@@ -889,11 +889,11 @@
           var r2 = symbols[Math.floor(Math.random() * symbols.length)];
           var r3 = symbols[Math.floor(Math.random() * symbols.length)];
 
-          // 5% jackpot, 52% two match, 43% lose
+          // 5% jackpot, 58% two match, 37% lose
           var roll = Math.random();
           if (roll < 0.05) {
             r2 = r1; r3 = r1;
-          } else if (roll < 0.57) {
+          } else if (roll < 0.63) {
             r2 = r1;
           }
 
