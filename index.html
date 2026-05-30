@@ -888,6 +888,15 @@
           var r1 = symbols[Math.floor(Math.random() * symbols.length)];
           var r2 = symbols[Math.floor(Math.random() * symbols.length)];
           var r3 = symbols[Math.floor(Math.random() * symbols.length)];
+
+          // 5% jackpot, 52% two match, 43% lose
+          var roll = Math.random();
+          if (roll < 0.05) {
+            r2 = r1; r3 = r1;
+          } else if (roll < 0.57) {
+            r2 = r1;
+          }
+
           slots[0].innerText = r1;
           slots[1].innerText = r2;
           slots[2].innerText = r3;
