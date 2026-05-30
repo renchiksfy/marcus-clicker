@@ -801,7 +801,6 @@
     var prestigeBonus = 0; // flat bonus auto shawarmas per second carried over
 
     function calcPrestigeBonus() {
-      // bonus = sqrt(totalshawarmas) * 0.1 + autoRate * 0.5, scaled by prestige count
       return Math.max(1, Math.floor(Math.sqrt(totalshawarmas) * 0.1 + autoRate * 0.5));
     }
 
@@ -816,7 +815,7 @@
       }
       var bonus = calcPrestigeBonus();
       document.getElementById("prestige-bonus-preview").innerText =
-        "+" + formatNum(bonus) + " permanent shawarmas/sec bonus";
+        "+" + formatNum(bonus) + "% click & auto bonus next run";
       document.getElementById("prestige-count").innerText =
         prestigeCount > 0 ? "prestige #" + prestigeCount : "";
       document.getElementById("prestige-overlay").classList.add("open");
@@ -831,12 +830,12 @@
       prestigeBonus += bonus;
       prestigeCount++;
 
-      // reset everything
+      // reset EVERYTHING
       shawarmas = 0;
       totalshawarmas = 0;
       clickPower = 1;
-      autoRate = prestigeBonus; // carry over bonus as base auto rate
-      multiplier = 1;
+      autoRate = 0;
+      multiplier = 1 + (prestigeBonus / 100);
       nextMilestone = 0;
 
       upgrades.forEach(function(u) {
@@ -848,9 +847,8 @@
       updateDisplay();
       renderUpgrades();
 
-      document.getElementById("stat-auto").innerText = autoRate;
       var m = document.getElementById("milestone");
-      m.innerHTML = "prestige <b>#" + prestigeCount + "</b> — +" + formatNum(bonus) + " shawarmas/sec bonus!";
+      m.innerHTML = "prestige <b>#" + prestigeCount + "</b> — x" + multiplier.toFixed(2) + " multiplier!";
       setTimeout(function() { m.innerHTML = ""; }, 4000);
     }
     var symbols = ["😂", "💀", "🔥", "⭐", "💎", "🤡"];
