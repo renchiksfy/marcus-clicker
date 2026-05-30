@@ -615,14 +615,14 @@
     var multiplier = 1;
 
     var upgrades = [
-      { name: "Hungry Hands",     desc: "+1 shawarma power",        cost: 25,     baseCost: 25,     owned: 0, type: "power", value: 1 },
-      { name: "Street Vendor",    desc: "+1 shawarma per second",   cost: 300,    baseCost: 300,    owned: 0, type: "auto",  value: 1 },
-      { name: "Double Wrap",      desc: "+2 shawarma power",        cost: 600,    baseCost: 600,    owned: 0, type: "power", value: 2 },
-      { name: "Shawarma Stand",   desc: "+2 shawarmas per second",  cost: 5000,   baseCost: 5000,   owned: 0, type: "auto",  value: 2 },
-      { name: "Golden Tongs",     desc: "+5 shawarma power",        cost: 8000,   baseCost: 8000,   owned: 0, type: "power", value: 5 },
-      { name: "Shawarma Factory", desc: "+5 shawarmas per second",  cost: 50000,  baseCost: 50000,  owned: 0, type: "auto",  value: 5 },
-      { name: "2x Sauce",         desc: "doubles all shawarmas",    cost: 150000, baseCost: 150000, owned: 0, type: "multi", value: 2 },
-      { name: "Shawarma God",     desc: "+15 shawarmas per second", cost: 500000, baseCost: 500000, owned: 0, type: "auto",  value: 15 },
+      { name: "Hungry Hands",     desc: "+1 shawarma power",        cost: 50,      baseCost: 50,      owned: 0, type: "power", value: 1 },
+      { name: "Street Vendor",    desc: "+1 shawarma per second",   cost: 1000,    baseCost: 1000,    owned: 0, type: "auto",  value: 1 },
+      { name: "Double Wrap",      desc: "+2 shawarma power",        cost: 3000,    baseCost: 3000,    owned: 0, type: "power", value: 2 },
+      { name: "Shawarma Stand",   desc: "+2 shawarmas per second",  cost: 25000,   baseCost: 25000,   owned: 0, type: "auto",  value: 2 },
+      { name: "Golden Tongs",     desc: "+5 shawarma power",        cost: 50000,   baseCost: 50000,   owned: 0, type: "power", value: 5 },
+      { name: "Shawarma Factory", desc: "+5 shawarmas per second",  cost: 300000,  baseCost: 300000,  owned: 0, type: "auto",  value: 5 },
+      { name: "2x Sauce",         desc: "doubles all shawarmas",    cost: 1000000, baseCost: 1000000, owned: 0, type: "multi", value: 2 },
+      { name: "Shawarma God",     desc: "+15 shawarmas per second", cost: 5000000, baseCost: 5000000, owned: 0, type: "auto",  value: 15 },
     ];
 
     var milestones = [100, 500, 1000, 5000, 10000, 50000, 100000];
@@ -649,7 +649,7 @@
       if (shawarmas < u.cost) return;
       shawarmas -= u.cost;
       u.owned++;
-      u.cost = Math.floor(u.baseCost * Math.pow(1.8, u.owned));
+      u.cost = Math.floor(u.baseCost * Math.pow(2.0, u.owned));
       if (u.type === "power") clickPower += u.value;
       if (u.type === "auto")  autoRate += u.value;
       if (u.type === "multi") multiplier *= u.value;
