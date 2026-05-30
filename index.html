@@ -733,11 +733,11 @@
         level: level,
         upgrades: upgrades.map(function(u) { return { owned: u.owned, cost: u.cost }; })
       };
-      localStorage.setItem("marcusClicker", JSON.stringify(data));
+      localStorage.setItem("shavarmaClicker_v2", JSON.stringify(data));
     }
 
     function loadGame() {
-      var raw = localStorage.getItem("marcusClicker");
+      var raw = localStorage.getItem("shavarmaClicker_v2");
       if (!raw) return;
       try {
         var data = JSON.parse(raw);
