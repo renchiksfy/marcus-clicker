@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Marcus Clicker</title>
+  <title>Shavarma Clicker</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -547,19 +547,19 @@
   </div>
 
   <div id="center">
-    <div id="game-title">Marcus Clicker</div>
-    <div id="score">marloons: <span id="count">0</span></div>
-    <div id="cps">0 marloons per second</div>
+    <div id="game-title">Shavarma Clicker</div>
+    <div id="score">shawarmas: <span id="count">0</span></div>
+    <div id="cps">0 shawarmas per second</div>
     <button id="marcus-btn" onclick="doClick(event)">
-      <img src="marcus.jpg.jpeg" alt="Marcus" />
+      <img src="shawarma.jpg.webp" alt="Marcus" />
     </button>
   </div>
 
   <div id="right">
     <h2>Stats</h2>
-    <div class="stat-row">Total marloons <span id="stat-total">0</span></div>
-    <div class="stat-row">Marloon power <span id="stat-power">1</span></div>
-    <div class="stat-row">Auto marloons <span id="stat-auto">0</span></div>
+    <div class="stat-row">Total shawarmas <span id="stat-total">0</span></div>
+    <div class="stat-row">shawarma power <span id="stat-power">1</span></div>
+    <div class="stat-row">Auto shawarmas <span id="stat-auto">0</span></div>
     <div class="stat-row">Multiplier <span id="stat-multi">x1</span></div>
     <div id="milestone"></div>
     <button id="open-gamble-btn" onclick="openGamble()">GAMBLE</button>
@@ -576,7 +576,7 @@
   <div id="prestige-overlay">
     <div id="prestige-modal">
       <h2>PRESTIGE</h2>
-      <p>Reset everything and start over.<br>In return, each upgrade gets a permanent bonus to its marloons per second based on how much you had.</p>
+      <p>Reset everything and start over.<br>In return, each upgrade gets a permanent bonus to its shawarmas per second based on how much you had.</p>
       <div id="prestige-bonus-preview"></div>
       <button id="prestige-confirm-btn" onclick="doPrestige()">CONFIRM RESET</button>
       <button id="prestige-cancel-btn" onclick="closePrestige()">cancel</button>
@@ -587,7 +587,7 @@
   <div id="gamble-overlay">
     <div id="gamble-modal">
       <h2>GAMBLING</h2>
-      <p class="sub">bet your marloons. win big or lose it all.</p>
+      <p class="sub">bet your shawarmas. win big or lose it all.</p>
       <div class="big-slots">
         <div class="big-slot" id="s1">?</div>
         <div class="big-slot" id="s2">?</div>
@@ -608,37 +608,37 @@
   </div>
 
   <script>
-    var marloons = 0;
-    var totalmarloons = 0;
+    var shawarmas = 0;
+    var totalshawarmas = 0;
     var clickPower = 1;
     var autoRate = 0;
     var multiplier = 1;
 
     var upgrades = [
-      { name: "Better Finger",  desc: "+1 marloon power",        cost: 10,    baseCost: 10,    owned: 0, type: "power", value: 1 },
-      { name: "Auto Clicker",   desc: "+1 marloon per second",   cost: 50,    baseCost: 50,    owned: 0, type: "auto",  value: 1 },
-      { name: "Double Tap",     desc: "+2 marloon power",        cost: 150,   baseCost: 150,   owned: 0, type: "power", value: 2 },
-      { name: "Marcus Fan",     desc: "+5 marloons per second",  cost: 500,   baseCost: 500,   owned: 0, type: "auto",  value: 5 },
-      { name: "Click Gloves",   desc: "+5 marloon power",        cost: 1000,  baseCost: 1000,  owned: 0, type: "power", value: 5 },
-      { name: "Marcus Army",    desc: "+20 marloons per second", cost: 5000,  baseCost: 5000,  owned: 0, type: "auto",  value: 20 },
-      { name: "2x Multiplier",  desc: "doubles all marloons",    cost: 10000, baseCost: 10000, owned: 0, type: "multi", value: 2 },
-      { name: "Robot Hands",    desc: "+50 marloons per second", cost: 50000, baseCost: 50000, owned: 0, type: "auto",  value: 50 },
+      { name: "Better Finger",  desc: "+1 shawarma power",        cost: 10,    baseCost: 10,    owned: 0, type: "power", value: 1 },
+      { name: "Auto Clicker",   desc: "+1 shawarma per second",   cost: 50,    baseCost: 50,    owned: 0, type: "auto",  value: 1 },
+      { name: "Double Tap",     desc: "+2 shawarma power",        cost: 150,   baseCost: 150,   owned: 0, type: "power", value: 2 },
+      { name: "Marcus Fan",     desc: "+5 shawarmas per second",  cost: 500,   baseCost: 500,   owned: 0, type: "auto",  value: 5 },
+      { name: "Click Gloves",   desc: "+5 shawarma power",        cost: 1000,  baseCost: 1000,  owned: 0, type: "power", value: 5 },
+      { name: "Marcus Army",    desc: "+20 shawarmas per second", cost: 5000,  baseCost: 5000,  owned: 0, type: "auto",  value: 20 },
+      { name: "2x Multiplier",  desc: "doubles all shawarmas",    cost: 10000, baseCost: 10000, owned: 0, type: "multi", value: 2 },
+      { name: "Robot Hands",    desc: "+50 shawarmas per second", cost: 50000, baseCost: 50000, owned: 0, type: "auto",  value: 50 },
     ];
 
     var milestones = [100, 500, 1000, 5000, 10000, 50000, 100000];
-    var milestoneNames = ["100 marloons!", "500 marloons!", "1K marloons!", "5K marloons!", "10K marloons!", "50K marloons!", "100K marloons!"];
+    var milestoneNames = ["100 shawarmas!", "500 shawarmas!", "1K shawarmas!", "5K shawarmas!", "10K shawarmas!", "50K shawarmas!", "100K shawarmas!"];
     var nextMilestone = 0;
 
     function renderUpgrades() {
       var html = "";
       for (var i = 0; i < upgrades.length; i++) {
         var u = upgrades[i];
-        var cant = marloons < u.cost ? "cant-afford" : "";
+        var cant = shawarmas < u.cost ? "cant-afford" : "";
         html += '<button class="upgrade-btn ' + cant + '" onclick="buyUpgrade(' + i + ')">' +
           '<span class="uowned">' + u.owned + '</span>' +
           '<div class="uname">' + u.name + '</div>' +
           '<div class="udesc">' + u.desc + '</div>' +
-          '<div class="ucost">Cost: ' + formatNum(u.cost) + ' marloons</div>' +
+          '<div class="ucost">Cost: ' + formatNum(u.cost) + ' shawarmas</div>' +
           '</button>';
       }
       document.getElementById("upgrades").innerHTML = html;
@@ -646,8 +646,8 @@
 
     function buyUpgrade(i) {
       var u = upgrades[i];
-      if (marloons < u.cost) return;
-      marloons -= u.cost;
+      if (shawarmas < u.cost) return;
+      shawarmas -= u.cost;
       u.owned++;
       u.cost = Math.floor(u.baseCost * Math.pow(1.5, u.owned));
       if (u.type === "power") clickPower += u.value;
@@ -659,8 +659,8 @@
 
     function doClick(e) {
       var gained = clickPower * multiplier;
-      marloons += gained;
-      totalmarloons += gained;
+      shawarmas += gained;
+      totalshawarmas += gained;
       addXP(gained);
       updateDisplay();
       renderUpgrades();
@@ -680,7 +680,7 @@
     }
 
     function checkMilestone() {
-      if (nextMilestone < milestones.length && totalmarloons >= milestones[nextMilestone]) {
+      if (nextMilestone < milestones.length && totalshawarmas >= milestones[nextMilestone]) {
         var m = document.getElementById("milestone");
         m.innerHTML = "milestone: <b>" + milestoneNames[nextMilestone] + "</b>";
         nextMilestone++;
@@ -689,9 +689,9 @@
     }
 
     function updateDisplay() {
-      document.getElementById("count").innerText = formatNum(Math.floor(marloons));
-      document.getElementById("cps").innerText = formatNum(autoRate * multiplier) + " marloons per second";
-      document.getElementById("stat-total").innerText = formatNum(totalmarloons);
+      document.getElementById("count").innerText = formatNum(Math.floor(shawarmas));
+      document.getElementById("cps").innerText = formatNum(autoRate * multiplier) + " shawarmas per second";
+      document.getElementById("stat-total").innerText = formatNum(totalshawarmas);
       document.getElementById("stat-power").innerText = clickPower * multiplier;
       document.getElementById("stat-auto").innerText = autoRate;
       document.getElementById("stat-multi").innerText = "x" + multiplier;
@@ -706,8 +706,8 @@
     setInterval(function() {
       if (autoRate > 0) {
         var gained = autoRate * multiplier;
-        marloons += gained;
-        totalmarloons += gained;
+        shawarmas += gained;
+        totalshawarmas += gained;
         addXP(gained);
         checkMilestone();
         updateDisplay();
@@ -721,8 +721,8 @@
     // SAVE & LOAD
     function saveGame() {
       var data = {
-        marloons: marloons,
-        totalmarloons: totalmarloons,
+        shawarmas: shawarmas,
+        totalshawarmas: totalshawarmas,
         clickPower: clickPower,
         autoRate: autoRate,
         multiplier: multiplier,
@@ -741,8 +741,8 @@
       if (!raw) return;
       try {
         var data = JSON.parse(raw);
-        marloons = data.marloons || 0;
-        totalmarloons = data.totalmarloons || 0;
+        shawarmas = data.shawarmas || 0;
+        totalshawarmas = data.totalshawarmas || 0;
         clickPower = data.clickPower || 1;
         autoRate = data.autoRate || 0;
         multiplier = data.multiplier || 1;
@@ -798,25 +798,25 @@
 
     // PRESTIGE
     var prestigeCount = 0;
-    var prestigeBonus = 0; // flat bonus auto marloons per second carried over
+    var prestigeBonus = 0; // flat bonus auto shawarmas per second carried over
 
     function calcPrestigeBonus() {
-      // bonus = sqrt(totalMarloons) * 0.1 + autoRate * 0.5, scaled by prestige count
-      return Math.max(1, Math.floor(Math.sqrt(totalmarloons) * 0.1 + autoRate * 0.5));
+      // bonus = sqrt(totalshawarmas) * 0.1 + autoRate * 0.5, scaled by prestige count
+      return Math.max(1, Math.floor(Math.sqrt(totalshawarmas) * 0.1 + autoRate * 0.5));
     }
 
     function openPrestige() {
       if (autoRate * multiplier < 10) {
-        alert("You need at least 10 marloons per second to prestige!");
+        alert("You need at least 10 shawarmas per second to prestige!");
         return;
       }
-      if (marloons < 270) {
-        alert("You need at least 270 marloons to prestige!");
+      if (shawarmas < 270) {
+        alert("You need at least 270 shawarmas to prestige!");
         return;
       }
       var bonus = calcPrestigeBonus();
       document.getElementById("prestige-bonus-preview").innerText =
-        "+" + formatNum(bonus) + " permanent marloons/sec bonus";
+        "+" + formatNum(bonus) + " permanent shawarmas/sec bonus";
       document.getElementById("prestige-count").innerText =
         prestigeCount > 0 ? "prestige #" + prestigeCount : "";
       document.getElementById("prestige-overlay").classList.add("open");
@@ -832,8 +832,8 @@
       prestigeCount++;
 
       // reset everything
-      marloons = 0;
-      totalmarloons = 0;
+      shawarmas = 0;
+      totalshawarmas = 0;
       clickPower = 1;
       autoRate = prestigeBonus; // carry over bonus as base auto rate
       multiplier = 1;
@@ -850,7 +850,7 @@
 
       document.getElementById("stat-auto").innerText = autoRate;
       var m = document.getElementById("milestone");
-      m.innerHTML = "prestige <b>#" + prestigeCount + "</b> — +" + formatNum(bonus) + " marloons/sec bonus!";
+      m.innerHTML = "prestige <b>#" + prestigeCount + "</b> — +" + formatNum(bonus) + " shawarmas/sec bonus!";
       setTimeout(function() { m.innerHTML = ""; }, 4000);
     }
     var symbols = ["😂", "💀", "🔥", "⭐", "💎", "🤡"];
@@ -860,18 +860,18 @@
     function closeGamble() { document.getElementById("gamble-overlay").classList.remove("open"); }
 
     function setBet(n) { document.getElementById("big-bet-input").value = n; }
-    function setBetHalf() { document.getElementById("big-bet-input").value = Math.floor(marloons / 2); }
-    function setBetAll() { document.getElementById("big-bet-input").value = Math.floor(marloons); }
+    function setBetHalf() { document.getElementById("big-bet-input").value = Math.floor(shawarmas / 2); }
+    function setBetAll() { document.getElementById("big-bet-input").value = Math.floor(shawarmas); }
 
     function doSpin() {
       if (spinning) return;
       var bet = parseInt(document.getElementById("big-bet-input").value);
       var result = document.getElementById("big-gamble-result");
       if (!bet || bet <= 0) { result.style.color = "#ff6a00"; result.innerText = "enter a bet!"; return; }
-      if (bet > marloons) { result.style.color = "red"; result.innerText = "not enough marloons!"; return; }
+      if (bet > shawarmas) { result.style.color = "red"; result.innerText = "not enough shawarmas!"; return; }
 
       spinning = true;
-      marloons -= bet;
+      shawarmas -= bet;
       updateDisplay();
       document.getElementById("big-spin-btn").disabled = true;
       result.innerText = "";
@@ -896,12 +896,12 @@
 
           if (r1 === r2 && r2 === r3) {
             var win = bet * 10;
-            marloons += win;
+            shawarmas += win;
             result.style.color = "#ff6a00";
             result.innerText = "JACKPOT! +" + formatNum(win);
           } else if (r1 === r2 || r2 === r3 || r1 === r3) {
             var win = bet * 2;
-            marloons += win;
+            shawarmas += win;
             result.style.color = "lime";
             result.innerText = "2 MATCH! +" + formatNum(win);
           } else {
